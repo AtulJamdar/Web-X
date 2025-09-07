@@ -19,7 +19,7 @@ export default function LoginPage() {
                 validationSchema={schema}
                 onSubmit={async (values, { setSubmitting }) => {
                     try {
-                        const res = await axios.post("http://localhost:5000/api/auth/login", values);
+                        const res = await axios.post(import.meta.env.VITE_API_URL + "/api/auth/login", values);
                         localStorage.setItem("token", res.data.token);
                         window.location.href = "/dashboard";
                     } catch (err) {

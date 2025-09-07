@@ -25,7 +25,7 @@ export default function ClientForm({ token }) {
     useEffect(() => { load(); }, [token]);
 
     const load = async () => {
-        const res = await axios.get("http://localhost:5000/api/auth/clients", {
+        const res = await axios.get(import.meta.env.VITE_API_URL + + "/api/auth/clients", {
             headers: { Authorization: "Bearer " + token }
         });
         setClients(res.data || []);
@@ -35,7 +35,7 @@ export default function ClientForm({ token }) {
         const q = e.target.value;
         setQuery(q);
         if (q.length > 0) {
-            const res = await axios.get(`http://localhost:5000/api/auth/search?q=${q}`, {
+            const res = await axios.get(import.meta.env.VITE_API_URL + `/api/auth/search?q=${q}`, {
                 headers: { Authorization: "Bearer " + token },
             });
             setClients(res.data);
@@ -46,12 +46,12 @@ export default function ClientForm({ token }) {
 
     const submit = async (values, { resetForm }) => {
         if (editing) {
-            await axios.put(`http://localhost:5000/api/auth/clients/${editing._id}`, values, {
+            await axios.put(import.meta.env.VITE_API_URL + `/api/auth/clients/${editing._id}`, values, {
                 headers: { Authorization: "Bearer " + token }
             });
             setEditing(null);
         } else {
-            await axios.post("http://localhost:5000/api/auth/clients", values, {
+            await axios.post(import.meta.env.VITE_API_URL + "/api/auth/clients", values, {
                 headers: { Authorization: "Bearer " + token }
             });
         }
@@ -60,7 +60,7 @@ export default function ClientForm({ token }) {
     };
 
     const del = async (id) => {
-        await axios.delete(`http://localhost:5000/api/auth/clients/${id}`, {
+        await axios.delete(import.meta.env.VITE_API_URL + `/api/auth/clients/${id}`, {
             headers: { Authorization: "Bearer " + token }
         });
         load();

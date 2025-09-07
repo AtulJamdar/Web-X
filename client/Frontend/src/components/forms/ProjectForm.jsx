@@ -25,11 +25,11 @@ export default function ProjectForm({ token }) {
     useEffect(() => { load(); }, [token]);
 
     const load = async () => {
-        const resP = await axios.get("http://localhost:5000/api/auth/projects", {
+        const resP = await axios.get(import.meta.env.VITE_API_URL + "/api/auth/projects", {
             headers: { Authorization: "Bearer " + token }
         });
         setProjects(resP.data || []);
-        const resC = await axios.get("http://localhost:5000/api/auth/clients", {
+        const resC = await axios.get(import.meta.env.VITE_API_URL + "/api/auth/clients", {
             headers: { Authorization: "Bearer " + token }
         });
         setClients(resC.data || []);
@@ -39,7 +39,7 @@ export default function ProjectForm({ token }) {
         const q = e.target.value;
         setQuery(q);
         if (q.length > 0) {
-            const res = await axios.get(`http://localhost:5000/api/auth/search?q=${q}`, {
+            const res = await axios.get(import.meta.env.VITE_API_URL + `/api/auth/search?q=${q}`, {
                 headers: { Authorization: "Bearer " + token },
             });
             setClients(res.data);
@@ -50,12 +50,12 @@ export default function ProjectForm({ token }) {
 
     const submit = async (values, { resetForm }) => {
         if (editing) {
-            await axios.put(`http://localhost:5000/api/auth/projects/${editing._id}`, values, {
+            await axios.put(import.meta.env.VITE_API_URL + `/api/auth/projects/${editing._id}`, values, {
                 headers: { Authorization: "Bearer " + token }
             });
             setEditing(null);
         } else {
-            await axios.post("http://localhost:5000/api/auth/projects", values, {
+            await axios.post(import.meta.env.VITE_API_URL + "/api/auth/projects", values, {
                 headers: { Authorization: "Bearer " + token }
             });
         }
@@ -64,7 +64,7 @@ export default function ProjectForm({ token }) {
     };
 
     const del = async (id) => {
-        await axios.delete(`http://localhost:5000/api/auth/projects/${id}`, {
+        await axios.delete(import.meta.env.VITE_API_URL + `/api/auth/projects/${id}`, {
             headers: { Authorization: "Bearer " + token }
         });
         load();

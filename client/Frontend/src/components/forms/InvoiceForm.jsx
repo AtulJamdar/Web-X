@@ -26,11 +26,11 @@ export default function InvoiceForm({ token }) {
     useEffect(() => { load(); }, [token]);
 
     const load = async () => {
-        const resI = await axios.get("http://localhost:5000/api/auth/invoices", {
+        const resI = await axios.get(import.meta.env.VITE_API_URL + "/api/auth/invoices", {
             headers: { Authorization: "Bearer " + token }
         });
         setInvoices(resI.data || []);
-        const resP = await axios.get("http://localhost:5000/api/auth/projects", {
+        const resP = await axios.get(import.meta.env.VITE_API_URL + "/api/auth/projects", {
             headers: { Authorization: "Bearer " + token }
         });
         setProjects(resP.data || []);
@@ -40,7 +40,7 @@ export default function InvoiceForm({ token }) {
         const q = e.target.value;
         setQuery(q);
         if (q.length > 0) {
-            const res = await axios.get(`http://localhost:5000/api/auth/search?q=${q}`, {
+            const res = await axios.get(import.meta.env.VITE_API_URL + `/api/auth/search?q=${q}`, {
                 headers: { Authorization: "Bearer " + token },
             });
             setInvoices(res.data);
@@ -51,12 +51,12 @@ export default function InvoiceForm({ token }) {
 
     const submit = async (values, { resetForm }) => {
         if (editing) {
-            await axios.put(`http://localhost:5000/api/auth/invoices/${editing._id}`, values, {
+            await axios.put(import.meta.env.VITE_API_URL + `/api/auth/invoices/${editing._id}`, values, {
                 headers: { Authorization: "Bearer " + token }
             });
             setEditing(null);
         } else {
-            await axios.post("http://localhost:5000/api/auth/invoices", values, {
+            await axios.post(import.meta.env.VITE_API_URL + "/api/auth/invoices", values, {
                 headers: { Authorization: "Bearer " + token }
             });
         }
@@ -65,7 +65,7 @@ export default function InvoiceForm({ token }) {
     };
 
     const del = async (id) => {
-        await axios.delete(`http://localhost:5000/api/auth/invoices/${id}`, {
+        await axios.delete(import.meta.env.VITE_API_URL + `/api/auth/invoices/${id}`, {
             headers: { Authorization: "Bearer " + token }
         });
         load();
