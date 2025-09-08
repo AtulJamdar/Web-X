@@ -15,7 +15,11 @@ const limiter = rateLimit({
 
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: ["https://web-x-zeta.vercel.app"],
+    methods: ["POST", "GET", "DELETE", "UPDATE", "PUT"],
+    credentials: true
+}))
 app.use(limiter)
 
 mongoose.connect(process.env.MONGO_URL)
