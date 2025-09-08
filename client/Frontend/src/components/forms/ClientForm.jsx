@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
     Paper, TextField, Button, Box, List, ListItem, ListItemText,
-    IconButton, Typography
+    IconButton, Typography, Stack
 } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -25,7 +25,7 @@ export default function ClientForm({ token }) {
     useEffect(() => { load(); }, [token]);
 
     const load = async () => {
-        const res = await axios.get(import.meta.env.VITE_API_URL + + "/api/auth/clients", {
+        const res = await axios.get(import.meta.env.VITE_API_URL + "/api/auth/clients", {
             headers: { Authorization: "Bearer " + token }
         });
         setClients(res.data || []);
@@ -42,7 +42,7 @@ export default function ClientForm({ token }) {
             });
             setClients(res.data);
         } else {
-            setResults();
+            load();
         }
     };
 
