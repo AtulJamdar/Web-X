@@ -9,6 +9,8 @@ const Project = require('../models/Project');
 const mongoose = require('mongoose')
 const { authorizeRole } = require("../middleware/role");
 const rateLimit = require("express-rate-limit");
+//new
+const { check, validationResult } = require("express-validator");
 
 
 const router = express.Router();
@@ -42,26 +44,80 @@ const loginLimiter = rateLimit({
 });
 
 // LOGIN
-router.post('/login', loginLimiter, async (req, res) => {
-    try {
-        const { email, password } = req.body;
+// router.post('/login', loginLimiter, async (req, res) => {
+//     try {
+//         const { email, password } = req.body;
 
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'Invalid email or password' });
+//         const user = await User.findOne({ email });
+//         if (!user) return res.status(400).json({ message: 'Invalid email or password' });
 
-        const ok = await bcrypt.compare(password, user.password);
-        if (!ok) return res.status(400).json({ message: 'Invalid email or password' });
+//         const ok = await bcrypt.compare(password, user.password);
+//         if (!ok) return res.status(400).json({ message: 'Invalid email or password' });
 
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+//         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-        res.json({
-            token,
-            user: { id: user._id, username: user.username, email: user.email }
-        });
-    } catch (e) {
-        res.status(500).json({ message: 'Server error' });
+//         res.json({
+//             token,
+//             user: { id: user._id, username: user.username, email: user.email }
+//         });
+//     } catch (e) {
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// });
+
+const router = express.Router();
+
+// @route   POST api/auth/login
+// @desc    Authenticate user & get token
+// @access  Public
+router.post(
+  "/login",
+  [
+    check("email", "Please include a valid email").isEmail(),
+    check("password", "Password is required").exists(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-});
+
+    const { email, password } = req.body;
+
+    try {
+      let user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ msg: "Invalid credentials" });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res.status(400).json({ msg: "Invalid credentials" });
+      }
+      
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      // Corrected line: Use process.env.JWT_SECRET
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: "5h" },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
 
 //Get current logged-in user
 router.get('/me', auth, async (req, res) => {
