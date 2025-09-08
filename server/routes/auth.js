@@ -64,14 +64,13 @@ const loginLimiter = rateLimit({
 //         res.status(500).json({ message: 'Server error' });
 //     }
 // });
-
-const router = express.Router();
+//------------------------------------
 
 // @route   POST api/auth/login
 // @desc    Authenticate user & get token
 // @access  Public
 router.post(
-  "/login",
+  "/login",loginLimiter,
   [
     check("email", "Please include a valid email").isEmail(),
     check("password", "Password is required").exists(),
