@@ -31,6 +31,8 @@ export default function ClientForm({ token }) {
         setClients(res.data || []);
     };
 
+    axios.defaults.withCredentials = true;
+
     const handleSearch = async (e) => {
         const q = e.target.value;
         setQuery(q);

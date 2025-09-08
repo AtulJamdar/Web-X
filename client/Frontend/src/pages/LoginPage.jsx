@@ -12,6 +12,7 @@ const schema = Yup.object({
 });
 
 export default function LoginPage() {
+    axios.defaults.withCredentials = true;
     return (
         <AuthLayout title="Welcome back">
             <Formik

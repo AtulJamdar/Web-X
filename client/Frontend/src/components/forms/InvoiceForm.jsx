@@ -36,6 +36,8 @@ export default function InvoiceForm({ token }) {
         setProjects(resP.data || []);
     };
 
+    axios.defaults.withCredentials = true;
+
     const handleSearch = async (e) => {
         const q = e.target.value;
         setQuery(q);

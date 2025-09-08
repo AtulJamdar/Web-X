@@ -35,6 +35,8 @@ export default function ProjectForm({ token }) {
         setClients(resC.data || []);
     };
 
+    axios.defaults.withCredentials = true;
+
     const handleSearch = async (e) => {
         const q = e.target.value;
         setQuery(q);

@@ -13,6 +13,7 @@ const schema = Yup.object({
 });
 
 export default function RegisterPage() {
+    axios.defaults.withCredentials = true;
     return (
         <AuthLayout title="Create an account">
             <Formik
