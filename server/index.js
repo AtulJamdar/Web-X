@@ -15,11 +15,7 @@ const limiter = rateLimit({
 
 
 app.use(express.json())
-app.use(cors({
-    origin: ["https://web-x-1.onrender.com"],
-    methods: ["POST", "GET", "DELETE", "PUT", "UPDATE"],
-    credentials: true
-}))
+app.use(cors())
 app.use(limiter)
 
 mongoose.connect(process.env.MONGO_URL)
