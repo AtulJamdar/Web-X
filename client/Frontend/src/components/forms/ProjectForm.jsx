@@ -44,9 +44,9 @@ export default function ProjectForm({ token }) {
             const res = await axios.get(import.meta.env.VITE_API_URL + `/api/auth/search?q=${q}`, {
                 headers: { Authorization: "Bearer " + token },
             });
-            setClients(res.data);
+            setProjects(res.data);
         } else {
-            setClients([]);
+            load();
         }
     };
 
