@@ -198,7 +198,7 @@ router.put("/clients/:id", auth, async (req, res) => {
 
 // Only admins can delete a client
 
-router.delete("/clients/:id", auth, authorizeRole("admin"), async (req, res) => {
+router.delete("/clients/:id", auth,  async (req, res) => {
     await Client.findOneAndDelete({ _id: req.params.id, userId: req.userId });
     res.json({ message: "Client deleted" });
 });
@@ -271,7 +271,7 @@ router.put("/projects/:id", auth, async (req, res) => {
 
 // Only Admins can Delete Project
 
-router.delete("/projects/:id", auth, authorizeRole("admin"), async (req, res) => {
+router.delete("/projects/:id", auth, async (req, res) => {
 
     await Project.findOneAndDelete({ _id: req.params.id, userId: req.userId }),
         res.json({ message: "Project deleted" })
@@ -345,7 +345,7 @@ router.put("/invoices/:id", auth, async (req, res) => {
 });
 
 //Only Admins can Delete Invoice
-router.delete("/invoices/:id", auth, authorizeRole("admin"), async (req, res) => {
+router.delete("/invoices/:id", auth, async (req, res) => {
     await Invoice.findOneAndDelete({ _id: req.params.id, userId: req.userId }),
         res.json({ message: "Invoice deleted" })
 })
